@@ -6,12 +6,14 @@ public class PlayerMovementScript : MonoBehaviour
 {
     private float horizontal;
     private float vertical;
-    private float speed = 4f;
+    public float speed = 4f;
     private bool isFacingRight = true;
+    private Vector2 direction;
 
-    [SerializeField] SpriteRenderer playerSpriteRenderer;
-    [SerializeField] Sprite playerRunningSprite;
-    [SerializeField] Sprite playerIDLESprite;
+    SpriteRenderer playerSpriteRenderer;
+    Sprite playerRunningSprite;
+    Sprite playerIDLESprite;
+    RigidBody2D playerRigidBody;
 
     // Update is called once per frame
     void Update()
@@ -24,11 +26,15 @@ public class PlayerMovementScript : MonoBehaviour
         else
             playerSpriteRenderer.sprite = playerIDLESprite;
 
+        direction.x = horizontal;
+        direction.y = vertical;
+        direction = direction.normalized;
+
         Flip();
     }
     private void FixedUpdate()
     {
-            transform.position = new Vector3(transform.position.x + horizontal * speed * Time.deltaTime, transform.position.y + vertical * speed * Time.deltaTime, 0f);
+        playerRigidBody.MovePosition(playerRigidBody.position + direction * speed * Time.deltaTime);
     }
     void Flip()
     {
